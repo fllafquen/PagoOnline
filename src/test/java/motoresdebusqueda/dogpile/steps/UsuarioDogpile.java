@@ -24,34 +24,28 @@ public class UsuarioDogpile extends ScenarioActor {
 
 
 
-    @Step("#actor ingresa a la pagina principal de dogpile")
-    public void ingresarADdogpile() {
-        paginaPrincipal.setDefaultBaseUrl("https://www.dogpile.com/");
+    @Step("#actor ingresa a la pagina principal de pago online Coopeuch")
+    public void ingresarAPagoOnline() {
+        paginaPrincipal.setDefaultBaseUrl("https://d1vvg66q5618zg.cloudfront.net/pagoexpress/");
         paginaPrincipal.open();
     }
 
     @Step("#actor realiza una busqueda de: {0}")
-    public void buscaPorPalabraClave(String palabraClave) {
+    public void ingresaRut(String palabraClave) {
         paginaPrincipal.ingresarPalabraClave(palabraClave);
         paginaPrincipal.realizarBusqueda();
+
     }
 
-    @Step("#actor deberia poder ver resultados que contengan la palabra: {0}")
-    public void deberiaVerResultadosConPalabra(String palabraEsperada) {
-        List<String> resultados = paginaResultado.obtenerResultados();
-        resultados.replaceAll(String::toLowerCase);
-
-        for(int i=0; i< resultados.size();i++){
-            System.out.println(resultados.get(i));
-        }
-
-        assertThat(resultados, Matchers.everyItem(Matchers.containsString(palabraEsperada)));
+    @Step("#actor realiza una busqueda de: {0}")
+    public void clickACreditoHipotecario() {
+        paginaPrincipal.clickCreditoHipotecario();
     }
 
-    @Step("#actor deberia ver un texto: {0} relevante con el titulo: {1}")
-    public void deberiaVerResultadoTituloConTextoCorrecto(String textoDeResultado, String tituloDeResultado) {
-        String texto = paginaResultado.obtenerTextoDeTituloResultado(tituloDeResultado);
-        System.out.println(texto);
-        assertThat(texto, Matchers.containsString(textoDeResultado));
+    @Step("#actor deberia poder ver resultados que contenga el container de Captcha")
+    public void deberiaVerCaptcha() {
+        Boolean resultado = paginaResultado.validaCaptcha();
+        assertThat(resultado, Matchers.equalTo(false));
+
     }
 }

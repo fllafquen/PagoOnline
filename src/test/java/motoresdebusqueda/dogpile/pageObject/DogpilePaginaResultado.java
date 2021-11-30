@@ -1,28 +1,30 @@
 package motoresdebusqueda.dogpile.pageObject;
 
+import lombok.SneakyThrows;
+import net.serenitybdd.core.annotations.findby.FindBy;
 import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.core.pages.WebElementFacade;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class DogpilePaginaResultado extends PageObject {
 
-    public static final String TITULO_RESULTADO = "a.web-bing__title";
-    public static final String DESCRIPCION_DE_TEXTO = "..//span[contains(@class,'web-bing__description')]";
-    public static final String DESCRIPCION_DE_TITULO = "//a[contains(@class, 'web-bing__title') and contains(.,'{0}')]";
+    @FindBy(xpath = "//h2[contains(text(),'Crédito Hipotecario')]")
+    WebElementFacade tituloResultado;
 
-    public List<String> obtenerResultados(){
+    @FindBy(id = "rc-imageselect")
+    WebElementFacade captchaContainer;
 
-        return findAll(TITULO_RESULTADO)
-                .stream()
-                .map(element -> element.getAttribute("textContext"))
-                .collect(Collectors.toList());
+
+    public String obtenerResultados(){
+        return tituloResultado.getText();
     }
 
-    public String obtenerTextoDeTituloResultado(String tituloDeResultado) {
-
-        return findBy(DESCRIPCION_DE_TITULO, tituloDeResultado)
-                .then().findBy(DESCRIPCION_DE_TEXTO)
-                .then().getText();
+    @SneakyThrows
+    public Boolean validaCaptcha(){
+        Thread.sleep(2000);
+        return captchaContainer.isPresent();
     }
+
 }
